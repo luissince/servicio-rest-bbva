@@ -7,7 +7,7 @@ docker image rm servicio-bbva
 docker build -t servicio-bbva .
 
 docker run -d \
---restart always
+--restart always \
 --name servicio-bbva \
 --net=upla \
 -p 8889:80 \
