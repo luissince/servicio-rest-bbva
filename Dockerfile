@@ -1,37 +1,35 @@
-FROM golang:alpine AS builder
+# Download golang image
+FROM golang:latest
 
-# Set necessary environmet variables needed for our image
+# Set necessary environmen variables needed for out image
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64
 
-# Move to working directory /build
-WORKDIR /build
+# Create to working directory /app
+RUN mkdir /app
 
-# Copy and download dependency using go mod
-COPY go.mod .
-COPY go.sum .
-RUN go mod download
+# Move to working directory /app
+WORKDIR /app
 
-# Copy the code into the container
+# Create directory /build for compiler
+RUN mkdir /build
+
+# Copy the code into container
 COPY . .
 
+# Download required modules
+RUN go mod download
+
+# Create directory logs
+RUN mkdir /etc/push
+
 # Build the application
-RUN go build -o main .
+RUN go build -o ./dist/main .
 
-# Move to /dist directory as the place for resulting binary folder
-WORKDIR /dist
-
-# Copy binary from build to main folder
-RUN cp /build/main .
-
-# Build a small image
-FROM scratch
-
-COPY --from=builder /dist/main /
-
+# Expose in external port 8890
 EXPOSE 8889
 
 # Command to run
-ENTRYPOINT ["/main"]
+ENTRYPOINT ["/app/dist/main"]
