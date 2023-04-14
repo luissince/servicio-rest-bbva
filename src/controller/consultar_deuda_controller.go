@@ -11,16 +11,19 @@ import (
 )
 
 func ObtenerDeuda(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
 
 	var body model.Body
 
-	err := c.BindJSON(&body)
-	if err != nil {
-		consultarDeudaError := model.ConsultarDeuda{}
-		consultarDeudaError.Detalle.Respuesta.Codigo = helper.CodigoResputas["3000"].Codigo
-		consultarDeudaError.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3000"].Descripcion
+	transaccion := &model.Transaccion{
+		NumeroReferenciaDeuda: "",
+	}
+	body.ConsultarDeuda.Detalle.Transaccion = transaccion
 
-		c.IndentedJSON(http.StatusOK, gin.H{"ConsultarDeuda": consultarDeudaError})
+	if err := c.BindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Cuerpo de solictud vacío.",
+		})
 		return
 	}
 
