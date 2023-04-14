@@ -68,13 +68,6 @@ func ObtenerDeuda(codigo string) (model.ConsultarDeuda, string) {
 
 	defer rows.Close()
 
-	if !rows.Next() {
-		consultarDeudaError := model.ConsultarDeuda{}
-		consultarDeudaError.Detalle.Respuesta.Codigo = helper.CodigoResputas["3009"].Codigo
-		consultarDeudaError.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3009"].Descripcion
-		return consultarDeudaError, "ok"
-	}
-
 	documentos := []model.Documento{}
 
 	for rows.Next() {
@@ -97,6 +90,14 @@ func ObtenerDeuda(codigo string) (model.ConsultarDeuda, string) {
 
 		documentos = append(documentos, documento)
 	}
+
+	if len(documentos) == 0 {
+		consultarDeudaError := model.ConsultarDeuda{}
+		consultarDeudaError.Detalle.Respuesta.Codigo = helper.CodigoResputas["3009"].Codigo
+		consultarDeudaError.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3009"].Descripcion
+		return consultarDeudaError, "ok"
+	}
+
 	transaccion.ListaDocumentos = documentos
 
 	consultarDeuda := model.ConsultarDeuda{}
