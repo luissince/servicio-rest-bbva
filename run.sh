@@ -1,3 +1,5 @@
+cp .env.example .env
+
 mkdir logs
 
 docker stop servicio-bbva && docker rm servicio-bbva
