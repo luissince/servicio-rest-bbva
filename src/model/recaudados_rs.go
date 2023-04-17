@@ -1,6 +1,6 @@
 package model
 
-type RecaudosRq struct {
+type RecaudosRs struct {
 	Cabecera Cabecera `json:"cabecera"`
 	Detalle  Detalle  `json:"detalle"`
 }

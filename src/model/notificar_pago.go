@@ -1,5 +1,5 @@
 package model
 
-type ConsultarDeuda struct {
+type NotificarPago struct {
 	RecaudosRq RecaudosRq `json:"recaudosRq"`
 }

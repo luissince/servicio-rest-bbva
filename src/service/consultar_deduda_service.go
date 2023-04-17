@@ -11,22 +11,22 @@ import (
 
 var contx = context.Background()
 
-func ObtenerDeuda(codigo string) (model.ConsultarDeuda, string) {
+func ObtenerDeuda(codigo string) model.BodyConsultarDeudaResponse {
 
 	if codigo == "" {
-		consultarDeudaError := model.ConsultarDeuda{}
-		consultarDeudaError.Detalle.Respuesta.Codigo = helper.CodigoResputas["0101"].Codigo
-		consultarDeudaError.Detalle.Respuesta.Descripcion = helper.CodigoResputas["0101"].Descripcion
-		return consultarDeudaError, "ok"
+		consultarDeudaError := model.BodyConsultarDeudaResponse{}
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Codigo = helper.CodigoResputas["0101"].Codigo
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Descripcion = helper.CodigoResputas["0101"].Descripcion
+		return consultarDeudaError
 	}
 
 	db, err := database.CreateConnection()
 	if err != nil {
 		fmt.Println(err)
-		consultarDeudaError := model.ConsultarDeuda{}
-		consultarDeudaError.Detalle.Respuesta.Codigo = helper.CodigoResputas["3002"].Codigo
-		consultarDeudaError.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3002"].Descripcion
-		return consultarDeudaError, "ok"
+		consultarDeudaError := model.BodyConsultarDeudaResponse{}
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Codigo = helper.CodigoResputas["3002"].Codigo
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3002"].Descripcion
+		return consultarDeudaError
 	}
 
 	defer db.Close()
@@ -48,10 +48,10 @@ func ObtenerDeuda(codigo string) (model.ConsultarDeuda, string) {
 
 	if err != nil {
 		fmt.Println(err)
-		consultarDeudaError := model.ConsultarDeuda{}
-		consultarDeudaError.Detalle.Respuesta.Codigo = helper.CodigoResputas["0101"].Codigo
-		consultarDeudaError.Detalle.Respuesta.Descripcion = helper.CodigoResputas["0101"].Descripcion
-		return consultarDeudaError, "ok"
+		consultarDeudaError := model.BodyConsultarDeudaResponse{}
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Codigo = helper.CodigoResputas["0101"].Codigo
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Descripcion = helper.CodigoResputas["0101"].Descripcion
+		return consultarDeudaError
 	}
 
 	queryDetalle := `exec bancos.bbva_servicioRest_consultaDeuda 2,@codigo`
@@ -59,11 +59,10 @@ func ObtenerDeuda(codigo string) (model.ConsultarDeuda, string) {
 	rows, err := db.QueryContext(contx, queryDetalle, sql.Named("codigo", codigo))
 
 	if err != nil {
-		fmt.Println(err)
-		consultarDeudaError := model.ConsultarDeuda{}
-		consultarDeudaError.Detalle.Respuesta.Codigo = helper.CodigoResputas["3009"].Codigo
-		consultarDeudaError.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3009"].Descripcion
-		return consultarDeudaError, "ok"
+		consultarDeudaError := model.BodyConsultarDeudaResponse{}
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Codigo = helper.CodigoResputas["3009"].Codigo
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3009"].Descripcion
+		return consultarDeudaError
 	}
 
 	defer rows.Close()
@@ -92,18 +91,19 @@ func ObtenerDeuda(codigo string) (model.ConsultarDeuda, string) {
 	}
 
 	if len(documentos) == 0 {
-		consultarDeudaError := model.ConsultarDeuda{}
-		consultarDeudaError.Detalle.Respuesta.Codigo = helper.CodigoResputas["3009"].Codigo
-		consultarDeudaError.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3009"].Descripcion
-		return consultarDeudaError, "ok"
+		consultarDeudaError := model.BodyConsultarDeudaResponse{}
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Codigo = helper.CodigoResputas["3009"].Codigo
+		consultarDeudaError.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3009"].Descripcion
+		return consultarDeudaError
 	}
 
 	transaccion.ListaDocumentos = documentos
 
-	consultarDeuda := model.ConsultarDeuda{}
-	consultarDeuda.Detalle.Respuesta.Codigo = helper.CodigoResputas["0001"].Codigo
-	consultarDeuda.Detalle.Respuesta.Descripcion = helper.CodigoResputas["0001"].Descripcion
-	consultarDeuda.Detalle.Transaccion = transaccion
+	body := model.BodyConsultarDeudaResponse{}
 
-	return consultarDeuda, "ok"
+	body.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Codigo = helper.CodigoResputas["0001"].Codigo
+	body.ConsultarDeudaResponse.RecaudosRs.Detalle.Respuesta.Descripcion = helper.CodigoResputas["0001"].Descripcion
+	body.ConsultarDeudaResponse.RecaudosRs.Detalle.Transaccion = transaccion
+
+	return body
 }

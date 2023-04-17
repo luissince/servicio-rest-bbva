@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -16,8 +15,6 @@ import (
 func main() {
 	time.LoadLocation("America/Lima")
 	godotenv.Load()
-
-	fmt.Println("Hello, World!")
 
 	var go_port string = os.Getenv("GO_PORT")
 
@@ -36,12 +33,7 @@ func main() {
 	})
 
 	r.POST("/ConsultarDeuda", controller.ObtenerDeuda)
-
-	// r.POST("/ConsultarDeuda", func(c *gin.Context) {
-	// 	consultarDeuda := model.ConsultarDeuda{}
-
-	// 	c.IndentedJSON(http.StatusOK, gin.H{"ConsultarDeuda": consultarDeuda})
-	// })
-
+	r.POST("/NotificarPago", controller.NotificarPago)
+	r.POST("/ExtornarPago", controller.ExtornarPago)
 	r.Run(go_port)
 }

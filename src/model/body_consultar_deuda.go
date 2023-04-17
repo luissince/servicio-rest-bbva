@@ -1,5 +1,5 @@
 package model
 
-type Body struct {
+type BodyConsultarDeuda struct {
 	ConsultarDeuda ConsultarDeuda `json:"ConsultarDeuda"`
 }
