@@ -1,4 +1,7 @@
-cp .env.example .env
+env=".env"
+
+if [ -e "$env" ]; then
+    cp .env.example .env
 
 mkdir logs
 
