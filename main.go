@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"servicio-rest-bbva/src/routers"
@@ -59,5 +60,6 @@ func main() {
 	routers.ServicioBbva(app.Group(basePath))
 
 	// Funciona encargada de iniciar el servidor
+	fmt.Println("Proceso en ejecución...")
 	app.Run(go_port)
 }
