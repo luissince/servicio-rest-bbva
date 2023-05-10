@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"os"
 	"servicio-rest-bbva/src/routers"
 	"time"
@@ -28,8 +29,9 @@ func main() {
 	// Cargar las variables de entorno
 	godotenv.Load()
 
-	//
+	// Variable de entorno
 	var go_port string = os.Getenv("GO_PORT")
+	var swagger_host string = os.Getenv("SWAGGER_HOST")
 
 	// Se establece la zana horaria
 	time.LoadLocation("America/Lima")
@@ -43,13 +45,17 @@ func main() {
 	// Agregar el swagger
 	basePath := "/v1"
 	docs.SwaggerInfo.BasePath = basePath
+	docs.SwaggerInfo.Host = swagger_host
 
-	// app.POST("/ConsultarDeuda", controller.ObtenerDeuda)
-	// app.POST("/NotificarPago", controller.NotificarPago)
-	// app.POST("/ExtornarPago", controller.ExtornarPago)
-
-	// Carga de rutas
+	// Configura ruta para la documentación de Swagger
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+	// Configura ruta para el archivo JSON de Swagger
+	app.GET("/swagger.json", func(c *gin.Context) {
+		c.JSON(http.StatusOK, docs.SwaggerInfo)
+	})
+
+	// Carga las rutas de controladores
 	routers.ServicioBbva(app.Group(basePath))
 
 	// Funciona encargada de iniciar el servidor
