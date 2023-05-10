@@ -1,6 +1,8 @@
 env=".env"
 
 if [ -e "$env" ]; then
+    echo "El archivo .env existe"
+else
     cp .env.example .env
 fi
 
