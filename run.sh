@@ -2,6 +2,7 @@ env=".env"
 
 if [ -e "$env" ]; then
     cp .env.example .env
+fi
 
 mkdir logs
 
