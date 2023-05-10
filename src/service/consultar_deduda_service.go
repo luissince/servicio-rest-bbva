@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"servicio-rest-bbva/main/src/database"
-	"servicio-rest-bbva/main/src/helper"
-	"servicio-rest-bbva/main/src/model"
+	"servicio-rest-bbva/src/database"
+	"servicio-rest-bbva/src/helper"
+	"servicio-rest-bbva/src/model"
 )
 
 var contx = context.Background()

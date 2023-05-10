@@ -3,13 +3,14 @@ package service
 import (
 	"database/sql"
 	"fmt"
-	"servicio-rest-bbva/main/src/database"
-	"servicio-rest-bbva/main/src/helper"
-	"servicio-rest-bbva/main/src/model"
+	"servicio-rest-bbva/src/database"
+	"servicio-rest-bbva/src/helper"
+	"servicio-rest-bbva/src/model"
 )
 
-func NotificarPago(transaccion *model.Transaccion) model.BodyNotificarPagoResponse {
-	if transaccion.NumeroReferenciaDeuda == "" {
+func NotificarPago(recaudosRq *model.RecaudosRq) model.BodyNotificarPagoResponse {
+	//body.NotificarPago.RecaudosRq.Detalle.Transaccion
+	if recaudosRq.Detalle.Transaccion.NumeroReferenciaDeuda == "" {
 		consultarDeuda := model.BodyNotificarPagoResponse{}
 		consultarDeuda.NotificarPagoResponse.RecaudosRs.Detalle.Respuesta.Codigo = helper.CodigoResputas["3013"].Codigo
 		consultarDeuda.NotificarPagoResponse.RecaudosRs.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3013"].Descripcion
@@ -28,8 +29,14 @@ func NotificarPago(transaccion *model.Transaccion) model.BodyNotificarPagoRespon
 	defer db.Close()
 
 	var resultado string
-	query := `exec Bancos.bbva_servicioRest_registroOperacion 1,@codigo,@numero,@monto`
-	row := db.QueryRowContext(contx, query, sql.Named("codigo", transaccion.NumeroReferenciaDeuda), sql.Named("numero", transaccion.NumeroDocumento), sql.Named("monto", transaccion.ImporteDeudaPagada))
+	query := `exec Bancos.bbva_servicioRest_registroOperacion @codigo,@numero,@monto,@fecha,@hora,'123456','9785'`
+	row := db.QueryRowContext(contx, query,
+		sql.Named("codigo", recaudosRq.Detalle.Transaccion.NumeroReferenciaDeuda),
+		sql.Named("numero", recaudosRq.Detalle.Transaccion.NumeroDocumento),
+		sql.Named("monto", recaudosRq.Detalle.Transaccion.ImporteDeudaPagada),
+		sql.Named("fecha", recaudosRq.Cabecera.Operacion.FechaOperacion),
+		sql.Named("hora", recaudosRq.Cabecera.Operacion.HoraOperacion),
+	)
 	err = row.Scan(&resultado)
 
 	if err != nil {

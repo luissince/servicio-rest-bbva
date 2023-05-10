@@ -2,14 +2,41 @@ package controller
 
 import (
 	"net/http"
-	"servicio-rest-bbva/main/src/helper"
-	"servicio-rest-bbva/main/src/model"
-	"servicio-rest-bbva/main/src/service"
+	"servicio-rest-bbva/src/helper"
+	"servicio-rest-bbva/src/model"
+	"servicio-rest-bbva/src/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
 
+// PingExample   godoc
+// @Summary 	 Ruta inicial
+// @Schemes
+// @Description  Ruta para testear el punto inicial
+// @Tags 		 Inicio
+// @Accept 		 json
+// @Produce 	 json
+// @Success 	 200  {string}  string "API GO LANG"
+// @Router / [get]
+func InitApp(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, gin.H{
+		"message": "API GO LANG",
+	})
+}
+
+// PingExample   godoc
+// @Summary 	 Obtener lista de deudas del alumno
+// @Schemes
+// @Description  Obtener el listado de deudas del alumno con su código o dni
+// @Tags 		 Consultar
+// @Accept 		 json
+// @Produce 	 json
+// @Param opcion body  model.BodyConsultarDeuda true "Estructura para realizar la consulta"
+// @Success 	 200  {object}  model.BodyConsultarDeudaResponse
+// @Failure 	 400  {object}  model.Error
+// @Failure 	 500  {object}  model.Error
+// @Router /ConsultarDeuda [post]
 func ObtenerDeuda(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
@@ -21,8 +48,8 @@ func ObtenerDeuda(c *gin.Context) {
 	body.ConsultarDeuda.RecaudosRq.Detalle.Transaccion = transaccion
 
 	if err := c.BindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Cuerpo de solicitud vacío.",
+		c.JSON(http.StatusBadRequest, model.Error{
+			Message: "Cuerpo de solicitud vacío.",
 		})
 		return
 	}

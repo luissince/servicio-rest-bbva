@@ -2,9 +2,9 @@ package controller
 
 import (
 	"net/http"
-	"servicio-rest-bbva/main/src/helper"
-	"servicio-rest-bbva/main/src/model"
-	"servicio-rest-bbva/main/src/service"
+	"servicio-rest-bbva/src/helper"
+	"servicio-rest-bbva/src/model"
+	"servicio-rest-bbva/src/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

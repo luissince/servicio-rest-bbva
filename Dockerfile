@@ -28,7 +28,7 @@ RUN mkdir /etc/push
 # Build the application
 RUN go build -o ./dist/main .
 
-# Expose in external port 8890
+# Expose in external port 8889
 EXPOSE 8889
 
 # Command to run

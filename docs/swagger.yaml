@@ -1,0 +1,233 @@
+definitions:
+  model.BodyConsultarDeuda:
+    properties:
+      ConsultarDeuda:
+        $ref: '#/definitions/model.ConsultarDeuda'
+    type: object
+  model.BodyConsultarDeudaResponse:
+    properties:
+      ConsultarDeudaResponse:
+        $ref: '#/definitions/model.ConsultarDeudaResponse'
+    type: object
+  model.BodyNotificarPago:
+    properties:
+      NotificarPago:
+        $ref: '#/definitions/model.NotificarPago'
+    type: object
+  model.BodyNotificarPagoResponse:
+    properties:
+      NotificarPagoResponse:
+        $ref: '#/definitions/model.NotificarPagoResponse'
+    type: object
+  model.Cabecera:
+    properties:
+      operacion:
+        $ref: '#/definitions/model.Operacion'
+    type: object
+  model.ConsultarDeuda:
+    properties:
+      recaudosRq:
+        $ref: '#/definitions/model.RecaudosRq'
+    type: object
+  model.ConsultarDeudaResponse:
+    properties:
+      recaudosRs:
+        $ref: '#/definitions/model.RecaudosRs'
+    type: object
+  model.Detalle:
+    properties:
+      respuesta:
+        $ref: '#/definitions/model.Respuesta'
+      transaccion:
+        $ref: '#/definitions/model.Transaccion'
+    type: object
+  model.Documento:
+    properties:
+      cantidadSubconceptos:
+        type: integer
+      descripcion:
+        type: string
+      fechaEmision:
+        type: string
+      fechaVencimiento:
+        type: string
+      importeDeuda:
+        type: number
+      importeDeudaMinima:
+        type: number
+      indicadorRestriccPago:
+        type: integer
+      numero:
+        type: string
+    type: object
+  model.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  model.NotificarPago:
+    properties:
+      recaudosRq:
+        $ref: '#/definitions/model.RecaudosRq'
+    type: object
+  model.NotificarPagoResponse:
+    properties:
+      recaudosRs:
+        $ref: '#/definitions/model.RecaudosRs'
+    type: object
+  model.Operacion:
+    properties:
+      canalOperacion:
+        type: string
+      codigoBanco:
+        type: integer
+      codigoConvenio:
+        type: integer
+      codigoOficina:
+        type: string
+      codigoOperacion:
+        type: integer
+      fechaOperacion:
+        type: string
+      horaOperacion:
+        type: string
+      numeracionOperacion:
+        type: integer
+    type: object
+  model.RecaudosRq:
+    properties:
+      cabecera:
+        $ref: '#/definitions/model.Cabecera'
+      detalle:
+        $ref: '#/definitions/model.Detalle'
+    type: object
+  model.RecaudosRs:
+    properties:
+      cabecera:
+        $ref: '#/definitions/model.Cabecera'
+      detalle:
+        $ref: '#/definitions/model.Detalle'
+    type: object
+  model.Respuesta:
+    properties:
+      codigo:
+        type: string
+      descripcion:
+        type: string
+    type: object
+  model.Transaccion:
+    properties:
+      cantidadDocsDeuda:
+        type: integer
+      codigoMoneda:
+        type: string
+      datosEmpresa:
+        type: string
+      fechaOperacionOriginal:
+        type: string
+      formaPago:
+        type: string
+      importeDeudaPagada:
+        type: number
+      indMasDeuda:
+        type: integer
+      listaDocumentos:
+        items:
+          $ref: '#/definitions/model.Documento'
+        type: array
+      nombreCliente:
+        type: string
+      numeroDocumento:
+        type: string
+      numeroOperacionEmpresa:
+        type: integer
+      numeroOperacionOriginal:
+        type: integer
+      numeroOperacionRecaudos:
+        type: integer
+      numeroReferenciaDeuda:
+        type: string
+      otrosDatosEmpresa:
+        type: string
+    required:
+    - numeroReferenciaDeuda
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: Ruta para testear el punto inicial
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: API GO LANG
+          schema:
+            type: string
+      summary: Ruta inicial
+      tags:
+      - Inicio
+  /ConsultarDeuda:
+    post:
+      consumes:
+      - application/json
+      description: Obtener el listado de deudas del alumno con su código o dni
+      parameters:
+      - description: Estructura para realizar la consulta
+        in: body
+        name: opcion
+        required: true
+        schema:
+          $ref: '#/definitions/model.BodyConsultarDeuda'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BodyConsultarDeudaResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Obtener lista de deudas del alumno
+      tags:
+      - Consultar
+  /NotificarPago:
+    post:
+      consumes:
+      - application/json
+      description: Proceso para realizar el pago correspondientes
+      parameters:
+      - description: Estructura para realizar la consulta
+        in: body
+        name: opcion
+        required: true
+        schema:
+          $ref: '#/definitions/model.BodyNotificarPago'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BodyNotificarPagoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Registrar pago
+      tags:
+      - Notificar Pago
+swagger: "2.0"
