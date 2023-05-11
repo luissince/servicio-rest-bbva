@@ -10,6 +10,18 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// PingExample   godoc
+// @Summary 	 Extornar pago
+// @Schemes
+// @Description  Proceso para realizar el extorno del pago
+// @Tags 		 Extornar Pago
+// @Accept 		 json
+// @Produce 	 json
+// @Param opcion body  model.BodyExtornarPago true "Estructura para realizar la consulta"
+// @Success 	 200  {object}  model.BodyExtornarPagoResponse
+// @Failure 	 400  {object}  model.Error
+// @Failure 	 500  {object}  model.Error
+// @Router /ExtornarPago [post]
 func ExtornarPago(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
@@ -19,8 +31,8 @@ func ExtornarPago(c *gin.Context) {
 	body.ExtornarPago.RecaudosRq.Detalle.Transaccion = transaccion
 
 	if err := c.BindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Cuerpo de solictud vacío.",
+		c.JSON(http.StatusBadRequest, model.Error{
+			Message: "Cuerpo de solictud vacío.",
 		})
 		return
 	}
@@ -35,7 +47,7 @@ func ExtornarPago(c *gin.Context) {
 		return
 	}
 
-	bodyResponse := service.ExtornarPago(body.ExtornarPago.RecaudosRq.Detalle.Transaccion)
+	bodyResponse := service.ExtornarPago(&body.ExtornarPago.RecaudosRq)
 
 	c.IndentedJSON(http.StatusOK, bodyResponse)
 }

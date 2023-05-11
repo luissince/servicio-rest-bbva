@@ -9,6 +9,16 @@ definitions:
       ConsultarDeudaResponse:
         $ref: '#/definitions/model.ConsultarDeudaResponse'
     type: object
+  model.BodyExtornarPago:
+    properties:
+      ExtornarPago:
+        $ref: '#/definitions/model.ExtornarPago'
+    type: object
+  model.BodyExtornarPagoResponse:
+    properties:
+      ExtornarPagoResponse:
+        $ref: '#/definitions/model.ExtornarPagoResponse'
+    type: object
   model.BodyNotificarPago:
     properties:
       NotificarPago:
@@ -64,6 +74,16 @@ definitions:
     properties:
       message:
         type: string
+    type: object
+  model.ExtornarPago:
+    properties:
+      recaudosRq:
+        $ref: '#/definitions/model.RecaudosRq'
+    type: object
+  model.ExtornarPagoResponse:
+    properties:
+      recaudosRs:
+        $ref: '#/definitions/model.RecaudosRs'
     type: object
   model.NotificarPago:
     properties:
@@ -200,6 +220,36 @@ paths:
       summary: Obtener lista de deudas del alumno
       tags:
       - Consultar
+  /ExtornarPago:
+    post:
+      consumes:
+      - application/json
+      description: Proceso para realizar el extorno del pago
+      parameters:
+      - description: Estructura para realizar la consulta
+        in: body
+        name: opcion
+        required: true
+        schema:
+          $ref: '#/definitions/model.BodyExtornarPago'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BodyExtornarPagoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Extornar pago
+      tags:
+      - Extornar Pago
   /NotificarPago:
     post:
       consumes:

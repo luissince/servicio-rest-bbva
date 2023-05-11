@@ -85,6 +85,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/ExtornarPago": {
+            "post": {
+                "description": "Proceso para realizar el extorno del pago",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Extornar Pago"
+                ],
+                "summary": "Extornar pago",
+                "parameters": [
+                    {
+                        "description": "Estructura para realizar la consulta",
+                        "name": "opcion",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.BodyExtornarPago"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.BodyExtornarPagoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/NotificarPago": {
             "post": {
                 "description": "Proceso para realizar el pago correspondientes",
@@ -146,6 +192,22 @@ const docTemplate = `{
             "properties": {
                 "ConsultarDeudaResponse": {
                     "$ref": "#/definitions/model.ConsultarDeudaResponse"
+                }
+            }
+        },
+        "model.BodyExtornarPago": {
+            "type": "object",
+            "properties": {
+                "ExtornarPago": {
+                    "$ref": "#/definitions/model.ExtornarPago"
+                }
+            }
+        },
+        "model.BodyExtornarPagoResponse": {
+            "type": "object",
+            "properties": {
+                "ExtornarPagoResponse": {
+                    "$ref": "#/definitions/model.ExtornarPagoResponse"
                 }
             }
         },
@@ -234,6 +296,22 @@ const docTemplate = `{
             "properties": {
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "model.ExtornarPago": {
+            "type": "object",
+            "properties": {
+                "recaudosRq": {
+                    "$ref": "#/definitions/model.RecaudosRq"
+                }
+            }
+        },
+        "model.ExtornarPagoResponse": {
+            "type": "object",
+            "properties": {
+                "recaudosRs": {
+                    "$ref": "#/definitions/model.RecaudosRs"
                 }
             }
         },
