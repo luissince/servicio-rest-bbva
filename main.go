@@ -44,7 +44,7 @@ func main() {
 	app.Use(corsMiddleware())
 
 	// Agregar el swagger
-	basePath := "/v1"
+	basePath := ""
 	docs.SwaggerInfo.BasePath = basePath
 	docs.SwaggerInfo.Host = swagger_host
 
