@@ -28,7 +28,7 @@ func ExtornarPago(recaudosRq *model.RecaudosRq) model.BodyExtornarPagoResponse {
 	defer db.Close()
 
 	var resultado string
-	query := `exec Bancos.Bancos.bbva_servicioRest_registroExtorno @codigo,@numero,@monto,@fecha,@hora,'123456','9785'`
+	query := `exec Bancos.bbva_servicioRest_registroExtorno @codigo,@numero,@monto,@fecha,@hora,'123456','9785'`
 	row := db.QueryRowContext(contx, query,
 		sql.Named("codigo", recaudosRq.Detalle.Transaccion.NumeroReferenciaDeuda),
 		sql.Named("numero", recaudosRq.Detalle.Transaccion.NumeroDocumento),
@@ -39,6 +39,8 @@ func ExtornarPago(recaudosRq *model.RecaudosRq) model.BodyExtornarPagoResponse {
 	err = row.Scan(&resultado)
 
 	if err != nil {
+		fmt.Println("scan error")
+		fmt.Println(err.Error())
 		consultarDeuda := model.BodyExtornarPagoResponse{}
 		consultarDeuda.ExtornarPagoResponse.RecaudosRs.Detalle.Respuesta.Codigo = helper.CodigoResputas["3002"].Codigo
 		consultarDeuda.ExtornarPagoResponse.RecaudosRs.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3002"].Descripcion
@@ -52,6 +54,8 @@ func ExtornarPago(recaudosRq *model.RecaudosRq) model.BodyExtornarPagoResponse {
 		consultarDeuda.ExtornarPagoResponse.RecaudosRs.Detalle.Respuesta.Descripcion = valor.Descripcion
 		return consultarDeuda
 	} else {
+		fmt.Println("result error")
+		fmt.Println(valor)
 		consultarDeuda := model.BodyExtornarPagoResponse{}
 		consultarDeuda.ExtornarPagoResponse.RecaudosRs.Detalle.Respuesta.Codigo = helper.CodigoResputas["3002"].Codigo
 		consultarDeuda.ExtornarPagoResponse.RecaudosRs.Detalle.Respuesta.Descripcion = helper.CodigoResputas["3002"].Descripcion
