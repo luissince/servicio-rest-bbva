@@ -7,6 +7,7 @@ import (
 	"servicio-rest-bbva/src/routers"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
@@ -41,7 +42,8 @@ func main() {
 	app := gin.Default()
 
 	// Middleware para CORS
-	app.Use(corsMiddleware())
+	// app.Use(corsMiddleware())
+	app.Use(cors.Default())
 
 	// Agregar el swagger
 	basePath := ""
